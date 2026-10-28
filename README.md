@@ -1,182 +1,243 @@
 # Revolve
 
-Revolve is delivered as two independently runnable and deployable projects:
+Revolve is a recovery-to-performance platform that keeps the customer journey and care-team operations in separate, focused applications.
 
-- `mobile/` — one Expo SDK 58 customer codebase. It exports the iPhone PWA and is configured to build a standalone Android APK.
-- `web/` — the existing React/Vite staff operations dashboard.
+The demo follows a clear progression:
 
-The customer and staff deployments must use distinct sites/URLs. Both store demo state locally on the device or browser; there is no backend or cross-device synchronisation.
+**Physiotherapy → Rehabilitation → Functional Training → Performance**
 
-## Live deployments
+It is a local-data prototype with no backend, authentication, payments, notifications or cross-device synchronisation.
 
-- Public download site: https://revolve-web.netlify.app/
-- Staff dashboard: https://revolve-web.netlify.app/dashboard
-- iPhone customer PWA: https://revolve-customer.netlify.app/
-- Android APK: https://github.com/mukharbajpai/revolve/releases/latest/download/revolve-android.apk
-- Android release details: https://github.com/mukharbajpai/revolve/releases/tag/v1.0.0
+## Try Revolve
 
-## Prerequisites
+| Experience | Link | Purpose |
+| --- | --- | --- |
+| Public website | [revolve-web.netlify.app](https://revolve-web.netlify.app/) | Overview and customer-app downloads |
+| Staff dashboard | [Open staff dashboard](https://revolve-web.netlify.app/dashboard) | Care-team operations demo |
+| iPhone customer PWA | [Open customer app](https://revolve-customer.netlify.app/) | Safari-installable customer experience |
+| Android customer app | [Download APK](https://github.com/mukharbajpai/revolve/releases/latest/download/revolve-android.apk) | Standalone Android application |
+| Android release | [View v1.0.0 release](https://github.com/mukharbajpai/revolve/releases/tag/v1.0.0) | Release notes and downloadable asset |
 
-- Node.js 22 LTS (`22.13+`) is recommended. Node `24.3+` is also supported by Expo SDK 58. Node 23 is not supported.
+### Install on iPhone
+
+1. Open the [customer app](https://revolve-customer.netlify.app/) in Safari.
+2. Tap **Share**.
+3. Select **Add to Home Screen**.
+4. Tap **Add**.
+
+The PWA opens in standalone mode and caches its application shell for offline reopening. Demo data remains stored in that browser installation.
+
+### Install on Android
+
+1. Download [`revolve-android.apk`](https://github.com/mukharbajpai/revolve/releases/latest/download/revolve-android.apk).
+2. Open the downloaded file on the Android device.
+3. If Android asks, allow the browser or file manager to install apps from that source.
+4. Complete the installation and open **Revolve**.
+
+The APK is standalone and does not require Expo Go or a development server. The v1.0.0 APK SHA-256 checksum is:
+
+```text
+9D3102829C27B1456FA0E28B37CEFC0369CD2CA093706173B909D4CC64D54873
+```
+
+## What is included
+
+### Customer application
+
+- Welcome/demo entry
+- Home and service discovery
+- Service detail and booking
+- Appointment detail, rescheduling and cancellation
+- My Journey
+- Progress check-ins and assigned-activity completion
+- Integrated Care Plan
+- Persistent local demo data and **Reset Demo**
+
+The fictional customer is Aarav Mehta. His goal is to return to running, his current stage is Rehabilitation, programme completion is 72%, and his next milestone is a pain-free 5 km walk.
+
+The percentage represents **programme completion**, not clinical recovery. Completing an activity never advances a stage automatically; stage clearance is a separate professional action.
+
+### Staff dashboard
+
+- Physiotherapist, trainer and admin demo roles
+- Searchable client list and client profiles
+- Appointments calendar
+- Integrated care-plan editing
+- Handover queue
+- Separate actions for sending a handover and trainer acknowledgement
+- Persistent browser demo data and **Reset Demo**
+
+Customer and staff data are intentionally separate. Any care-team update shown in the customer app is a clearly labelled demo scenario, not an update received from another device.
+
+## Project structure
+
+```text
+revolve/
+├── mobile/   Expo SDK 58, React Native, TypeScript and Expo Router
+├── web/      React, Vite and TypeScript
+├── README.md
+└── HANDOVER.md
+```
+
+| Project | Outputs | Local persistence |
+| --- | --- | --- |
+| [`mobile/`](./mobile) | Android APK and iPhone PWA | AsyncStorage |
+| [`web/`](./web) | Public website and staff dashboard | localStorage |
+
+The mobile app uses native React Native components. It is not a website embedded in a WebView.
+
+## Technology
+
+### Customer app
+
+- Expo SDK 58
+- React Native 0.88
+- React 19
+- Expo Router
+- TypeScript
+- AsyncStorage
+- Expo web export and a service worker for the PWA
+- EAS Build for the Android APK
+
+### Public website and staff dashboard
+
+- React 19
+- Vite
+- TypeScript
+- Local browser persistence
+- Netlify static hosting with SPA route fallback
+
+## Run locally
+
+### Requirements
+
+- Git
 - npm
-- An Expo account and EAS CLI access when an Android APK is actually built
-- A static HTTPS host (the included configuration targets Netlify) for each web deployment
+- Node.js 22 LTS (`22.13+`) or Node.js `24.3+`
 
-Expo Go is not required for either final customer deliverable. The repository is upgraded to Expo SDK 58, so Expo Go 58 may still be used for optional development.
+Node.js 23 is not supported by the current Expo toolchain configuration.
 
-## Put the project on GitHub
+Clone the repository:
 
-This workspace starts with a local `main` branch. After committing the current files, authenticate GitHub CLI and create the remote repository:
-
-```powershell
-cd C:\CodeCave\revolve
-gh auth login
-gh repo create revolve --private --source=. --remote=origin --push
+```bash
+git clone https://github.com/mukharbajpai/revolve.git
+cd revolve
 ```
 
-Use `--public` instead of `--private` only when the source is ready to be publicly visible. A public Android download URL cannot point to a private GitHub Release unless every visitor is signed in and has repository access.
+### Customer app
 
-For later updates:
-
-```powershell
-git add .
-git commit -m "Describe the update"
-git push
-```
-
-Recommended release order:
-
-1. Push the source to GitHub.
-2. Deploy `mobile/` as the customer PWA and copy its HTTPS URL.
-3. Generate the APK, then upload it to a public GitHub Release or another public file host.
-4. Configure those two URLs on the `web/` site and deploy the public landing page plus staff dashboard.
-
-## Customer app: install and check
-
-```powershell
-cd C:\CodeCave\revolve\mobile
-npm install
+```bash
+cd mobile
+npm ci
 npm run typecheck
 npm run lint
-```
-
-Optional development server:
-
-```powershell
 npx expo start
 ```
 
-## iPhone customer PWA
+The Expo development server is optional tooling for contributors; users installing the final applications do not need Expo Go.
 
-Build and preview the production web output:
+Build and preview the customer PWA:
 
-```powershell
-cd C:\CodeCave\revolve\mobile
+```bash
+cd mobile
 npm run build:web
 npm run preview:web
 ```
 
-Open the printed local URL to inspect it. Installation on an iPhone requires an HTTPS deployment: open the customer URL in Safari, tap **Share**, choose **Add to Home Screen**, then tap **Add**. The installed app uses standalone display, iPhone safe areas, bundled icons, persisted local demo data and offline app-shell caching.
+### Public website and staff dashboard
 
-Deploy the customer PWA to its own Netlify site:
-
-```powershell
-cd C:\CodeCave\revolve\mobile
-npx netlify-cli@latest login
-npx netlify-cli@latest deploy --build
-npx netlify-cli@latest deploy --build --prod
+```bash
+cd web
+npm ci
+npm run lint
+npm run build
+npm run dev
 ```
 
-The first deploy prompts you to create or link a site. Link this directory only to the customer site, inspect the draft URL from the first command, then run the production command. `mobile/netlify.toml` supplies the build settings, cache headers and SPA route fallback. Save the resulting HTTPS URL for `VITE_CUSTOMER_PWA_URL`.
+To preview the production build instead of starting the development server:
 
-## Android customer APK
+```bash
+npm run preview
+```
 
-`mobile/eas.json` contains an `apk` profile with `android.buildType: "apk"`. When remote builds are allowed, create the standalone APK with:
+Open `/` for the public page and `/dashboard` for staff operations.
 
-```powershell
-cd C:\CodeCave\revolve\mobile
+## Build the Android APK
+
+An Expo account with access to the configured EAS project is required. The `apk` profile in [`mobile/eas.json`](./mobile/eas.json) produces an installable APK rather than an Android App Bundle.
+
+```bash
+cd mobile
 npx eas-cli@latest login
 npx eas-cli@latest build --platform android --profile apk
 ```
 
-Download the `.apk` from the build URL printed by EAS. This is a standalone application with its JavaScript and assets embedded; it does not require Expo Go or a development server.
+Before a future release:
 
-To make the APK downloadable from the public website, save it as `revolve-android.apk` and upload it to a GitHub Release:
+1. Increment `android.versionCode` in [`mobile/app.json`](./mobile/app.json).
+2. Update the application version when appropriate.
+3. Reuse the existing Android signing credentials; do not replace them unintentionally.
+4. Install and test the generated APK on a physical Android device.
+5. Upload it to the GitHub Release using the exact filename `revolve-android.apk` so the stable download URL continues to work.
 
-```powershell
-cd C:\CodeCave\revolve
-gh release create v1.0.0 .\revolve-android.apk --title "Revolve Android v1.0.0" --notes "Standalone Android customer app."
+## Deployment
+
+The GitHub repository is connected to two independent Netlify sites:
+
+| Site | Base directory | Build command | Publish directory |
+| --- | --- | --- | --- |
+| Customer PWA | `mobile` | `npm run build:web` | `dist` |
+| Public/staff website | `web` | `npm run build` | `dist` |
+
+Both projects include a `netlify.toml` that defines build settings and SPA route fallback behavior.
+
+The public landing-page links are Vite build-time variables. Production defaults are stored in [`web/.env.production`](./web/.env.production):
+
+```dotenv
+VITE_CUSTOMER_PWA_URL=https://revolve-customer.netlify.app/
+VITE_ANDROID_APK_URL=https://github.com/mukharbajpai/revolve/releases/latest/download/revolve-android.apk
 ```
 
-For a public repository, the stable download URL is:
+Netlify environment variables can override these values when the deployment URLs change.
 
-```text
-https://github.com/mukharbajpai/revolve/releases/latest/download/revolve-android.apk
-```
+Manual deployment with the Netlify CLI is also supported:
 
-Use that URL as `VITE_ANDROID_APK_URL`. For a private repository, use a public artifact host instead if anonymous visitors need to download the APK.
-
-The standalone APK has been generated and published in the `v1.0.0` GitHub Release. Its SHA-256 checksum is `9D3102829C27B1456FA0E28B37CEFC0369CD2CA093706173B909D4CC64D54873`. Future EAS builds should reuse the existing Android signing credentials rather than replacing them.
-
-## Public website and staff dashboard
-
-The `web/` project now serves the public download landing page at `/` and the existing operations dashboard at `/dashboard`.
-
-Run locally:
-
-```powershell
-cd C:\CodeCave\revolve\web
-npm install
-npm run dev
-```
-
-Build and preview the production output:
-
-```powershell
-cd C:\CodeCave\revolve\web
-npm run lint
-npm run build
-npm run preview
-```
-
-The landing-page links are Vite build-time variables. For a local production build, create the ignored environment override and replace both example URLs:
-
-```powershell
-cd C:\CodeCave\revolve\web
-Copy-Item .env.example .env.production.local
-notepad .env.production.local
-npm run build
-npm run preview
-```
-
-Deploy the public website and staff dashboard to a different Netlify site. The first draft deploy creates or links the site; set the two URLs after it is linked, then rebuild and deploy:
-
-```powershell
-cd C:\CodeCave\revolve\web
+```bash
+# Customer PWA
+cd mobile
 npx netlify-cli@latest login
 npx netlify-cli@latest deploy --build
-npx netlify-cli@latest env:set VITE_CUSTOMER_PWA_URL "https://revolve-customer.netlify.app/"
-npx netlify-cli@latest env:set VITE_ANDROID_APK_URL "https://github.com/mukharbajpai/revolve/releases/latest/download/revolve-android.apk"
+npx netlify-cli@latest deploy --build --prod
+
+# Public website and staff dashboard
+cd ../web
 npx netlify-cli@latest deploy --build
 npx netlify-cli@latest deploy --build --prod
 ```
 
-Inspect the second draft deployment before promoting the same build to production. Link `web/` only to the public/staff site. `web/netlify.toml` supplies its independent build and SPA fallback.
+Keep the customer PWA and public/staff website linked to different Netlify sites.
 
-### Netlify deployment from the GitHub repository
+## Demo data and privacy
 
-You can alternatively import the same GitHub repository twice in Netlify:
+- All names, care plans, appointments and progress records are fictional demo data.
+- Data is stored only in the current app installation or browser profile.
+- Reset Demo restores the bundled starting state.
+- There is no account system or cloud backup.
+- Clearing app/browser storage removes local changes.
+- The mobile and staff experiences do not synchronise with each other.
 
-- Customer site: base directory `mobile`, build command `npm run build:web`, publish directory `dist`.
-- Public/staff site: base directory `web`, build command `npm run build`, publish directory `dist`.
-- Add `VITE_CUSTOMER_PWA_URL` and `VITE_ANDROID_APK_URL` to the public/staff site's environment variables before its production deploy.
+## Current verification status
 
-Keep the two Netlify sites and URLs separate. Subsequent pushes to `main` can then deploy each project independently.
+The final delivery checks confirmed:
 
-## Demo behaviour and scope
+- The staff web lint and production build pass.
+- The deployed public page, direct dashboard route and customer PWA return HTTP 200.
+- The deployed landing-page bundle contains the correct PWA and APK URLs.
+- The APK URL returns an Android package download.
+- The APK archive contains an Android manifest, DEX files and bundled resources.
 
-The customer flow retains welcome entry, Home, Services, booking and appointment management, My Journey, Progress, the Integrated Care Plan, local persistence and **Reset Demo**. The fictional customer is Aarav Mehta, at Rehabilitation, with 72% programme completion and a next milestone of a pain-free 5 km walk. That percentage is programme completion, not clinical recovery. Completing activities does not advance stages.
+Physical-device installation and full user-acceptance testing should still be repeated for every new release.
 
-The staff app retains its physiotherapist, trainer and admin roles, client operations, care-plan editing, separate handover sending, trainer acknowledgement and Reset Demo. Its data is separate from the customer app. The labelled care-team scenarios are demonstrations only and do not claim updates came from another device.
+## Additional project context
 
-There is no backend, real authentication, payment processing, database, notification service or cross-device synchronisation. The live customer, public and staff URLs are listed at the top of this README; their locally persisted demo data remains separate.
+See [`HANDOVER.md`](./HANDOVER.md) for implementation details, persistence keys, important files, completed commits and guidance for future development sessions.
