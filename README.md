@@ -7,6 +7,14 @@ Revolve is delivered as two independently runnable and deployable projects:
 
 The customer and staff deployments must use distinct sites/URLs. Both store demo state locally on the device or browser; there is no backend or cross-device synchronisation.
 
+## Live deployments
+
+- Public download site: https://revolve-web.netlify.app/
+- Staff dashboard: https://revolve-web.netlify.app/dashboard
+- iPhone customer PWA: https://revolve-customer.netlify.app/
+- Android APK: https://github.com/mukharbajpai/revolve/releases/latest/download/revolve-android.apk
+- Android release details: https://github.com/mukharbajpai/revolve/releases/tag/v1.0.0
+
 ## Prerequisites
 
 - Node.js 22 LTS (`22.13+`) is recommended. Node `24.3+` is also supported by Expo SDK 58. Node 23 is not supported.
@@ -108,7 +116,7 @@ https://github.com/mukharbajpai/revolve/releases/latest/download/revolve-android
 
 Use that URL as `VITE_ANDROID_APK_URL`. For a private repository, use a public artifact host instead if anonymous visitors need to download the APK.
 
-This repository currently has a **configured APK build**, not a generated APK. No remote build was started as part of this work. EAS will create managed signing credentials if the account has none; if credentials already exist, review and reuse them rather than replacing them.
+The standalone APK has been generated and published in the `v1.0.0` GitHub Release. Its SHA-256 checksum is `9D3102829C27B1456FA0E28B37CEFC0369CD2CA093706173B909D4CC64D54873`. Future EAS builds should reuse the existing Android signing credentials rather than replacing them.
 
 ## Public website and staff dashboard
 
@@ -171,4 +179,4 @@ The customer flow retains welcome entry, Home, Services, booking and appointment
 
 The staff app retains its physiotherapist, trainer and admin roles, client operations, care-plan editing, separate handover sending, trainer acknowledgement and Reset Demo. Its data is separate from the customer app. The labelled care-team scenarios are demonstrations only and do not claim updates came from another device.
 
-There is no backend, real authentication, payment processing, database, notification service or cross-device synchronisation. Nothing in this repository has been published or deployed.
+There is no backend, real authentication, payment processing, database, notification service or cross-device synchronisation. The live customer, public and staff URLs are listed at the top of this README; their locally persisted demo data remains separate.
