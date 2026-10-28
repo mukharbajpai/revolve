@@ -1,0 +1,6 @@
+# Local Netlify folder
+.netlify
+
+# Local release artifacts and environment overrides
+*.apk
+.env*.local
