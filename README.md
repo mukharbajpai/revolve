@@ -103,7 +103,7 @@ gh release create v1.0.0 .\revolve-android.apk --title "Revolve Android v1.0.0" 
 For a public repository, the stable download URL is:
 
 ```text
-https://github.com/OWNER/REPOSITORY/releases/latest/download/revolve-android.apk
+https://github.com/mukharbajpai/revolve/releases/latest/download/revolve-android.apk
 ```
 
 Use that URL as `VITE_ANDROID_APK_URL`. For a private repository, use a public artifact host instead if anonymous visitors need to download the APK.
@@ -147,8 +147,8 @@ Deploy the public website and staff dashboard to a different Netlify site. The f
 cd C:\CodeCave\revolve\web
 npx netlify-cli@latest login
 npx netlify-cli@latest deploy --build
-npx netlify-cli@latest env:set VITE_CUSTOMER_PWA_URL "https://YOUR-CUSTOMER-SITE.netlify.app"
-npx netlify-cli@latest env:set VITE_ANDROID_APK_URL "https://github.com/OWNER/REPOSITORY/releases/latest/download/revolve-android.apk"
+npx netlify-cli@latest env:set VITE_CUSTOMER_PWA_URL "https://revolve-customer.netlify.app/"
+npx netlify-cli@latest env:set VITE_ANDROID_APK_URL "https://github.com/mukharbajpai/revolve/releases/latest/download/revolve-android.apk"
 npx netlify-cli@latest deploy --build
 npx netlify-cli@latest deploy --build --prod
 ```
